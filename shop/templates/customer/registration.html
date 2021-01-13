@@ -12,10 +12,12 @@ CONTACT
 <div class="container">
   <div class="row justify-content-center mt-3">
     <div class="col-12 col-md-8 col-lg-6 pb-4">
+      {% for error_field, error_message in form.errors.items %}
+        <i> <p class="text-danger pr-5"> *{{ error_message|striptags }}</p></i>
+      {% endfor %}
       <form method="post">
           {% csrf_token %}
           <div class="card border rounded-0">
-
             <div class="card-body p-3">
               <div class="form-group">
                 <div class="input-group mb-3">

@@ -5,22 +5,19 @@ Home
 {% endblock %}
 
 {% block content %}
-
-  <div class="container-fluid">
-
+  
   <div class="py-4">
-    <div class="col-10  my-2 ">
-          <h2 class="text-captitalize text-center">
-            {%if category%}
-              product of the category: <b>{{category}}</b>
-            {%else%}
-              <b class="">All our Products</b> 
-            {%endif%}
-          </h2>
-      </div>
     <div class="container">
       <div class="row">
-        
+        <div class="col-10 mx-auto my-2 text-center">
+          <h1 class="text-captitalze font-weight-bold">
+            {%if category%}
+            {{category.name}}
+            {%else%}
+            All Products
+            {%endif%}
+          </h1>
+        </div>
       </div>
     </div>
   </div>
@@ -28,32 +25,23 @@ Home
   <div class="container">
     <div class="row">
       {% for product in products %}
-      <div class="col-9 mb-3 mx-auto col-md-6 col-lg-3">
-        <div class="card mb-4 h-100" style="border-color: transparent;">
-          <div class="p-1" id="imgs">
+      <div class="col-9 mx-auto col-md-6 col-lg-3">
+        <div class="card mb-4" style="border-color: transparent;">
+          <div class="p-4">
             <a href="{{product.get_absolute_url}}">
               <img src="{{product.image.url}}" class="card-img-top" alt="{{product.name}}">
             </a>
-
           </div>
-          <div class="card-footer d-flex justify-content-between" id="footer"
-          style="background: transparent; border-color: transparent;">
-            <p class="font-weight-bold mb-0">
+          <p class="font-weight-bold mb-0 text-center">
               {{product.name}}
             </p>
-            <h5 class="text-info font-italic mb-0 " id="price">
-              <span class="mr-1">$</span> {{product.price}}
-            </h5>
-          </div>
+          <h5 class="text-info font-italic mb-0 text-center">
+            <span class="mr-1">$</span> {{product.price}}
+          </h5>
         </div>
       </div>
       {% endfor %}
     </div>
-
     <br>
   </div>
-</div>
-
-
-
 {% endblock %}

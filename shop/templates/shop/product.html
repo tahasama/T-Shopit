@@ -7,11 +7,39 @@ Product
 
 {% block content %}
 <div class="container ">
-  <div class="row mt-2">
-    <div class="col-10 mx-auto col-md-6 my-3">
-      <img src="{{product.image.url}}" alt="">
+  <div class="row mt-2 ">
+    <div class="col-md-1" id="img234">
+    {% if product.image2 %}
+      <div>
+        <a href="{{ product.image2.url }}" data-lightbox="home-images">
+          <img src="{{ product.image2.url}}" alt="" class="img-fluid">
+        </a>
+      </div>
+    {% endif %}
+    <br>
+    {% if product.image3 %}
+      <div >
+        <a href="{{ product.image3.url }}" data-lightbox="home-images">
+          <img src="{{ product.image3.url}}" alt="" class="img-fluid">
+        </a>
+      </div>
+    {% endif %}
+    
+    {% if product.image4 %}
+      <div >
+        <a href="{{ product.image4.url }}" data-lightbox="home-images">
+          <img src="{{ product.image4.url}}" alt="" class="img-fluid">
+        </a>
+      </div>
+    {% endif %}
     </div>
-    <div class="col-10 mx-auto col-md-6 my-3">
+    <div class="col-10 mx-auto col-md-5 my-3">
+      <a href="{{ product.image.url }}" data-lightbox="home-images">
+        <img src="{{ product.image.url}}" alt="" class="img-fluid">
+      </a>
+    </div>
+    
+    <div class="col-9 mx-auto col-md-6 my-3">
       <div>
         <h1 class="product_title">{{product.name}}</h1>
         <h5 class="text-info font-italic mb-3">
@@ -31,7 +59,7 @@ Product
       </div>
     </div>
   </div>
-
+  
   <div class="card">
     <div class="card-header">
       <h4>Reviews</h4>

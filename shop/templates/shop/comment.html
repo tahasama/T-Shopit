@@ -1,0 +1,16 @@
+{% if user.is_authenticated %}
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          {{form.as_p}}
+        </div>
+        <br>
+        <div class="form-group">
+        <button type="submit" class="btn btn-success" style="width: 100px;">Post</button>
+        </div>
+      </form>
+    </div>
+{% endif %}
+
+    ok

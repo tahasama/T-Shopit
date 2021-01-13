@@ -1,0 +1,59 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+
+  <div class="container-fluid">
+
+  <div class="py-4">
+    <div class="col-10  my-2 ">
+          <h2 class="text-captitalize text-center">
+            {%if category%}
+              product of the category: <b>{{category}}</b>
+            {%else%}
+              <b class="">All our Products</b> 
+            {%endif%}
+          </h2>
+      </div>
+    <div class="container">
+      <div class="row">
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      {% for product in products %}
+      <div class="col-9 mb-3 mx-auto col-md-6 col-lg-3">
+        <div class="card mb-4 h-100" style="border-color: transparent;">
+          <div class="p-1" id="imgs">
+            <a href="{{product.get_absolute_url}}">
+              <img src="{{product.image.url}}" class="card-img-top" alt="{{product.name}}">
+            </a>
+
+          </div>
+          <div class="card-footer d-flex justify-content-between" id="footer"
+          style="background: transparent; border-color: transparent;">
+            <p class="font-weight-bold mb-0">
+              {{product.name}}
+            </p>
+            <h5 class="text-info font-italic mb-0 " id="price">
+              <span class="mr-1">$</span> {{product.price}}
+            </h5>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <br>
+  </div>
+</div>
+
+
+
+{% endblock %}

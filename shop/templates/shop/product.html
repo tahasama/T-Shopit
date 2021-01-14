@@ -9,7 +9,7 @@ Product
 <div class="container ">
   <div class="row mt-2 ">
     <div class="col-md-1" id="img234">
-    {% if product.image2 %}
+      {% if product.image2 %}
       <div>
         <a href="{{ product.image2.url }}" data-lightbox="home-images">
           <img src="{{ product.image2.url}}" alt="" class="img-fluid">
@@ -23,8 +23,8 @@ Product
           <img src="{{ product.image3.url}}" alt="" class="img-fluid">
         </a>
       </div>
-    {% endif %}
-    
+    {% endif %} 
+    <br>   
     {% if product.image4 %}
       <div >
         <a href="{{ product.image4.url }}" data-lightbox="home-images">
@@ -96,16 +96,8 @@ Product
          </li>
      {% endfor %}
    </ul>
-  
-    {% endif %}
-  
-  
+    {% endif %} 
   </div>
-  
-  </div>
-  
-
 </div>
-
 
 {% endblock %}

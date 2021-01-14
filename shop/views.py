@@ -12,29 +12,40 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMessage
 from django.template.loader import get_template
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import UpdateView, DeleteView
-
-
+# from django.contrib.auth.mixins import LoginRequiredMixin
+# from django.views.generic.edit import UpdateView, DeleteView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
 def home(request, category_slug=None):
     category_page = None
-    products_list = None
+    products = None
     if category_slug != None:
         category_page = get_object_or_404(Category, slug=category_slug)
-        print(category_page)
         products = Product.objects.filter(category=category_page, available=True)
     else:
         products = Product.objects.filter(available=True)
 
+    paginator = Paginator(products, 3) # 3 posts in each page
+    page = request.GET.get('page')
+    
+    try:
+        products = paginator.page(page)
+        
+    except PageNotAnInteger:
+        # If page is not an integer deliver the first page
+        products = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range deliver last page of results
+        products = paginator.page(paginator.num_pages)
     return render(request, 'shop/home.html', {'category': category_page, 'products': products})
 
 
 def productPage(request, category_slug, product_slug):
     try:
         product = Product.objects.get(category__slug=category_slug, slug=product_slug)
+        print(product.image2.url)
     except Exception as e:
         raise e
     reviews = Review.objects.filter(product=product)

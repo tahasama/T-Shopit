@@ -41,6 +41,22 @@ Home
         </div>
       </div>
       {% endfor %}
+      <div class="pagination ">
+        <span class="step-links">
+          <h5>
+            {% if products.has_previous %}
+                <a href="?page={{ products.previous_page_number }}"><i class="fas fa-backward "></i></a>
+            {% endif %}
+                <span class="current">
+                    Page {{ products.number }} of {{ products.paginator.num_pages }}.
+                </span>
+            {% if products.has_next %}
+                <a href="?page={{ products.next_page_number }}"><i class="fas fa-forward "></i></a>
+            {% endif %}
+          </h5>
+        </span>
+    </div>
+    
     </div>
     <br>
   </div>

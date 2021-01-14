@@ -16,6 +16,12 @@ from django.template.loader import get_template
 # from django.views.generic.edit import UpdateView, DeleteView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.template.loader import render_to_string
+import weasyprint
+
+from .recommender import Recommender
+
 
 
 def home(request, category_slug=None):
@@ -27,7 +33,7 @@ def home(request, category_slug=None):
     else:
         products = Product.objects.filter(available=True)
 
-    paginator = Paginator(products, 3) # 3 posts in each page
+    paginator = Paginator(products, 8) # 8 posts in each page
     page = request.GET.get('page')
     
     try:
@@ -39,15 +45,22 @@ def home(request, category_slug=None):
     except EmptyPage:
         # If page is out of range deliver last page of results
         products = paginator.page(paginator.num_pages)
+    print(products)
     return render(request, 'shop/home.html', {'category': category_page, 'products': products})
 
 
 def productPage(request, category_slug, product_slug):
     try:
         product = Product.objects.get(category__slug=category_slug, slug=product_slug)
-        print(product.image2.url)
+        
     except Exception as e:
         raise e
+
+    r = Recommender()
+    recommended_products = r.suggest_products_for([product], 4)
+
+    print(recommended_products)
+
     reviews = Review.objects.filter(product=product)
     
     if request.method == 'POST' and request.user.is_authenticated :
@@ -64,7 +77,7 @@ def productPage(request, category_slug, product_slug):
             return redirect('product_detail',category_slug=category_slug, product_slug=product_slug)
     else:
         form = ReviewEditForm()
-    return render(request, 'shop/product.html', {'product': product, 'form':form,'reviews':reviews})
+    return render(request, 'shop/product.html', {'product': product, 'form':form,'reviews':reviews,'recommended_products': recommended_products})
 
 
 @login_required
@@ -133,18 +146,22 @@ def add_cart(request, product_id):
         )
         cart_item.save()
 
-    return redirect('home')
+    return redirect('cart_detail')
 
 
 def cart_detail(request, total=0, counter=0, cart_items=None):
     try:
         cart = Cart.objects.get(cart_id=cart_key(request))
         cart_items = CartItem.objects.filter(cart=cart, active=True)
-        for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity)
-            counter += cart_item.quantity
+               
+        for cart_itemz in cart_items:
+            total += (cart_itemz.product.price * cart_itemz.quantity)
+            counter += cart_itemz.quantity  
+            print(cart_itemz.product)
+       
     except ObjectDoesNotExist:
         pass
+
     stripe.api_key = settings.STRIPE_SECRET_KEY
     stripe_total = int(total * 100)
     description = 'T-Shop - New Order'
@@ -216,7 +233,19 @@ def cart_detail(request, total=0, counter=0, cart_items=None):
 
         except stripe.error.CardError as e:
             return False, e
-    return render(request, 'shop/cart.html', {'cart_items':cart_items, 'total':total, 'counter':counter, 'data_key':data_key, 'stripe_total':stripe_total, 'description':description})
+    
+    if cart_items :
+        for cart_item in cart_items:
+            global recommended_products # prevent local variable 'recommended_products' referenced before assignment
+            r = Recommender()            
+            recommended_products = r.suggest_products_for([cart_item.product], 4)
+            print(recommended_products) 
+    else:
+        recommended_products = []
+
+    return render(request, 'shop/cart.html', {'cart_items':cart_items, 'total':total, 'counter':counter,
+                         'data_key':data_key, 'stripe_total':stripe_total, 'description':description,
+                                                'recommended_products': recommended_products})
 
 def cart_remove(request, product_id):
     cart = Cart.objects.get(cart_id=cart_key(request))
@@ -336,3 +365,13 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'shop/contact.html', {'form': form})
+
+@staff_member_required
+def admin_order_pdf(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order_items = OrderItem.objects.filter(order=order)
+    html = render_to_string('shop/pdf.html',{'order': order,'order_items':order_items})
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename=order_{order.id}.pdf'
+    weasyprint.HTML(string=html).write_pdf(response,stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + '/shop/pdf.css')])
+    return response

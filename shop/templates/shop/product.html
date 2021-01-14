@@ -59,13 +59,41 @@ Product
       </div>
     </div>
   </div>
+  {% if recommended_products %}
+  <div class="container">
+    <div class="row">
   
-  <div class="card">
+    <h4>People who bought this also bought:</h4>
+    {% for p in recommended_products %}
+    <div class="col-9 mx-auto col-md-3 col-lg-3">
+    <div class="card mb-4" style="border-color: transparent; background: #ecdff1">
+      <div class="p-4">
+        <a href="{{ p.get_absolute_url }}">
+          <img src="{{ p.image.url }}"  class="card-img-top" alt="{{product.name}}">  
+      </div>
+      <a href="{{ p.get_absolute_url }}" class="text-decoration-none ">
+        <p class="font-weight-italic mb-0 text-center text-dark">
+          {{p.name}}
+        </p>
+      <h5 class="text-info font-italic mb-0 text-center">
+        <span class="mr-1">$</span> {{product.price}}
+      </h5>
+      
+      </a>
+    </div>
+  </div>
+    {% endfor %}
+    
+  </div>
+</div>
+  {% endif %}
+ 
+  <div class="card" style="background: #ecdff1">
     <div class="card-header">
       <h4>Reviews</h4>
     </div>
     {% if user.is_authenticated %}
-    <div class="card-body">
+    <div class="card-body" style="">
       <form method="post">
         {% csrf_token %}
         <div class="form-group">
@@ -86,10 +114,10 @@ Product
     {% if reviews.count > 0 %}
     <ul class="list-group list-group-flush">
      {% for review in reviews %}
-         <li class="list-group-item"> <h5>{{review.user.username}}</h5>
+         <li class="list-group-item" style="background: #ecdff1"> <h5>{{review.user.username}}</h5>
          <p class="card-text">{{review.content}}</p>
          {% if user.is_authenticated %}
-         <a href="{{review.get_absolute_url}}"><i class="fas fa-edit"></i></a>
+         <a href="{% url 'update_review' review.product.category.slug review.product.slug review.id %}"><i class="fas fa-edit"></i></a>
          <a href="{% url 'remove_review' review.product.category.slug review.product.slug review.id %}"><i class="fas fa-trash-alt"></i></a>
          <i><h6 class="text-secondary" id="dateadd" >{{review.date_added}}</h6></i>
          {% endif %}

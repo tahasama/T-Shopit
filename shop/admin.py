@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Category, Product, Order, OrderItem, Review
-# Register your models here.
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ['content', 'id']
@@ -37,10 +39,14 @@ class OrderItemAdmin(admin.TabularInline):
     can_delete = False
     max_num = 0
 
+def order_pdf(obj):
+        url = reverse('admin_order_pdf', args=[obj.id])
+        return mark_safe(f'<a href="{url}">PDF</a>') #mark_safe mean that it is saf 
+order_pdf.short_description = 'Invoice'
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'billingName', 'emailAddress', 'created']
+    list_display = ['id', 'billingName', 'emailAddress', 'created',order_pdf]
     list_display_links = ('id', 'billingName')
     search_fields = ['id', 'billingName', 'emailAddress']
     readonly_fields = ['id', 'token', 'total', 'emailAddress', 'created',
@@ -63,6 +69,9 @@ class OrderAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+    
 
 #admin.site.register(Review)
 
+# use memcache admin index site
+admin.site.index_template = 'memcache_status/admin_index.html'

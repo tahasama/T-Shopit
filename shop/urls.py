@@ -1,10 +1,14 @@
 from django.urls import path
 from . import views
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
     path('', views.home, name='home'),
+    #path('',cache_page(60 * 15)( views.home), name='home'),
     path('category/<slug:category_slug>', views.home, name='products_by_category'),
-    path('category/<slug:category_slug>/<slug:product_slug>',views.productPage, name='product_detail'),
+    #path('category/<slug:category_slug>', cache_page(60 * 15)(views.home), name='products_by_category'),
+    path('category/<slug:category_slug>/<slug:product_slug>', views.productPage, name='product_detail'),
+    #path('category/<slug:category_slug>/<slug:product_slug>',cache_page(60 * 15)(views.productPage), name='product_detail'),
     path('cart/add/<int:product_id>', views.add_cart, name='add_cart'),
     path('cart/', views.cart_detail, name='cart_detail'),
     path('cart/remove/<int:product_id>', views.cart_remove, name='cart_remove'),
@@ -17,4 +21,5 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('<slug:category_slug>/<slug:product_slug>/remove/<slug:review_id>', views.remove_review, name='remove_review'),
     path('<slug:category_slug>/<slug:product_slug>/update/<slug:review_id>', views.update_review, name='update_review'),
+    path('admin/order/<int:order_id>/pdf/',views.admin_order_pdf,name='admin_order_pdf'),
 ]

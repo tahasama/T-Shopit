@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'stripe',
     'crispy_forms',
     'widget_tweaks',
+    'memcache_status',
     
 ]
 
@@ -87,6 +88,16 @@ DATABASES = {
     }
 }
 
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 1
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

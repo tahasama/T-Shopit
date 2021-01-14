@@ -28,7 +28,7 @@ Cart
       <table class="table cart_table">
         <thead class="cart_thead">
           <tr>
-            <th colspan="4">
+            <th colspan="4" style="background: #ecdff1">
               Your items
             </th>
           </tr>
@@ -36,7 +36,7 @@ Cart
         {% for cart_item in cart_items %}
           <tr>
             <td>
-              <a href="cart_item.product.get_url">
+              <a href="{{cart_item.product.get_absolute_url}}">
                 <img src="{{cart_item.product.image.url}}" width="100" height=auto alt="">
               </a>
             </td>
@@ -71,7 +71,7 @@ Cart
       <table class="table cart_table">
         <thead class="cart_thead">
             <tr>
-              <th>
+              <th style="background: #ecdff1">
                 Check out
               </th>
             </tr>
@@ -119,6 +119,37 @@ Cart
           </a>
         </div>
     </div>
+    {% if recommended_products %}
+  <div class="container">
+    <div class="row" style="padding-top: 30px ;">
+     
+        <h5>People who bought this also bought:</h5>
+        <br><br><br>
+    {% for p in recommended_products %}
+    {{cart_item.product.name}}
+    <div class="col-9 mx-auto col-md-3 col-lg-3">
+    <div class="card mb-4 bg-secondary" style="border-color: transparent; width:75%;">
+      <div class="p-4">
+        <a href="{{ p.get_absolute_url }}">
+          <img src="{{ p.image.url }}"  class="card-img-top" alt="{{product.name}}">  
+      </div>
+      <a href="{{ p.get_absolute_url }}" class="text-decoration-none ">
+        <p class="font-weight-italic mb-0 text-center text-dark">
+          {{p.name}}
+        </p>
+      <h5 class="text-info font-italic mb-0 text-center">
+        <span class="mr-1">$</span> {{p.price}}
+      </h5>    
+      </a>
+    </div>
+  </div>
+
+    {% endfor %}
+
+    
+  </div>
+</div>
+  {% endif %}
   </div>
   {% endif %}
 {% endblock %}

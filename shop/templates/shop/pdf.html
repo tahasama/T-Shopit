@@ -1,0 +1,81 @@
+<html>
+    <body>
+    <div class="container">
+    <a href="/" class="navbar-brand"><i class="fab fa-shopify text-warning fa-2x"></i></a><h1>Shopit</h1>
+    <div class="text-center">
+      <h4 class="text-center product_title">
+        Order Details:
+      </h4>
+      <table class="table table-bordered">
+        <tr>
+          <td class="text-left" colspan="2">
+            <b>Order:</b> #{{ order.id }} <br>
+            <b>Date: </b>{{ order.created|date:"d M Y" }} <br>
+            <b>Order Total:</b>${{ order.total }} <br>
+            <b>Order Status:</b><i class="fas fa-check"></i> Complete.
+          </td>
+          <td class="text-left" colspan="2">
+            <b>Billing Address: </b> 
+            {{ order.billingName }} 
+            {{ order.billingAddress1 }} 
+            {{ order.billingCity }} 
+            {{ order.billingPostcode }} 
+            {{ order.billingCountry }} 
+          </td>
+        </tr>
+        
+        <tr>
+          <td><b>Product Description</b></td>
+          <td><b>Qty</b></td>
+          <td><b>Unit Price</b></td>
+          <td><b>Sub-Total</b></td>
+        </tr>
+        {% for item in order_items %}
+          <tr>
+            <td>{{ item.product }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.price }}</td>
+            <td>${{ item.sub_total }}</td>
+          </tr>
+        {% endfor %}
+    
+        <tr>
+          <td class="text-right" colspan="3"><b>Total</b></td>
+          <td>${{ order.total }}</td>
+        </tr>
+        <tr>
+          <td class="text-right" colspan="3"><b>Total Paid</b></td>
+          <td>${{ order.total }}</td>
+        </tr>
+ 
+        <tr>
+          <td class="text-left" colspan="2">
+              
+            <b>Shipping Address:</b> 
+            {{ order.shippingName }} 
+            {{ order.shippingAddress1 }} 
+            {{ order.shippingCity }} 
+            {{ order.shippingPostcode }} 
+            {{ order.shippingCountry }} 
+          </td>
+          
+          <td class="text-left" colspan="2">
+            <b>Payment Details:</b> 
+            <br>
+            The order #{{ order.id }} has been paid successfully
+            <span class="paid">
+                Paid
+               </span>
+          </td>
+        </tr>
+      </table>
+      <h5>Thank you for shopping with us. hope we see you soon!</h5>
+    </div>
+  </div>
+    
+    
+    
+
+
+    </body>
+    </html>

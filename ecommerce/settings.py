@@ -113,9 +113,9 @@ DATABASES['default'] = dj_database_url.config(default='postgres://irsyhiintdiubb
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
-REDIS_HOST = config('DJANGO_REDIS_HOST')
-REDIS_PORT = 6379
-REDIS_DB = 1
+# REDIS_HOST = config('DJANGO_REDIS_HOST')
+# REDIS_PORT = 6379
+# REDIS_DB = 1
 
 CACHES = {
     'default': {

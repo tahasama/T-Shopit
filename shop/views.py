@@ -20,7 +20,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.template.loader import render_to_string
 import weasyprint
 
-from .recommender import Recommender
+#from .recommender import Recommender
 
 
 
@@ -56,10 +56,10 @@ def productPage(request, category_slug, product_slug):
     except Exception as e:
         raise e
 
-    r = Recommender()
-    recommended_products = r.suggest_products_for([product], 4)
+    # r = Recommender()
+    # recommended_products = r.suggest_products_for([product], 4)
 
-    print(recommended_products)
+    # print(recommended_products)
 
     reviews = Review.objects.filter(product=product)
     
@@ -77,7 +77,7 @@ def productPage(request, category_slug, product_slug):
             return redirect('product_detail',category_slug=category_slug, product_slug=product_slug)
     else:
         form = ReviewEditForm()
-    return render(request, 'shop/product.html', {'product': product, 'form':form,'reviews':reviews,'recommended_products': recommended_products})
+    return render(request, 'shop/product.html', {'product': product, 'form':form,'reviews':reviews}) #,'recommended_products': recommended_products})
 
 
 @login_required
@@ -234,18 +234,18 @@ def cart_detail(request, total=0, counter=0, cart_items=None):
         except stripe.error.CardError as e:
             return False, e
     
-    if cart_items :
-        for cart_item in cart_items:
-            global recommended_products # prevent local variable 'recommended_products' referenced before assignment
-            r = Recommender()            
-            recommended_products = r.suggest_products_for([cart_item.product], 4)
-            print(recommended_products) 
-    else:
-        recommended_products = []
+    # if cart_items :
+    #     for cart_item in cart_items:
+    #         global recommended_products # prevent local variable 'recommended_products' referenced before assignment
+    #         r = Recommender()            
+    #         recommended_products = r.suggest_products_for([cart_item.product], 4)
+    #         print(recommended_products) 
+    # else:
+    #     recommended_products = []
 
     return render(request, 'shop/cart.html', {'cart_items':cart_items, 'total':total, 'counter':counter,
-                         'data_key':data_key, 'stripe_total':stripe_total, 'description':description,
-                                                'recommended_products': recommended_products})
+                         'data_key':data_key, 'stripe_total':stripe_total, 'description':description})
+                                               # ,'recommended_products': recommended_products})
 
 def cart_remove(request, product_id):
     cart = Cart.objects.get(cart_id=cart_key(request))

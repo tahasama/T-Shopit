@@ -75,3 +75,7 @@ class OrderAdmin(admin.ModelAdmin):
 
 # use memcache admin index site
 admin.site.index_template = 'memcache_status/admin_index.html'
+
+admin.site.site_header= 'T-Shopit Administration'
+admin.site.site_title = 'T-Shopit'
+admin.site.index_title = 'T-Shopit'

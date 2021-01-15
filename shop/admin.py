@@ -69,9 +69,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
-    
 
-#admin.site.register(Review)
 
 # use memcache admin index site
 admin.site.index_template = 'memcache_status/admin_index.html'

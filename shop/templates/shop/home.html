@@ -1,6 +1,6 @@
 {% extends 'shop/base.html' %}
 {% load static %}
-
+{% load cache %}
 {% block title %}
 Home
 {% endblock %}
@@ -27,7 +27,7 @@ Home
 
   <div class="container">
     <div class="row">
-  
+      {% cache 600 products %}
       {% for product in products %}
       <div class="col-9 mx-auto col-md-6 col-lg-3">
         <div class="card mb-4" style="border-color: transparent; background: #ecdff1">
@@ -45,7 +45,7 @@ Home
         </div>
       </div>
       {% endfor %}
-
+      {% endcache %}
       <div class="pagination ">
         <span class="step-links">
           <h5>

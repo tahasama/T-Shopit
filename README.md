@@ -1,3 +1,3 @@
 # T-Shopit
 
-An E=commerce, Made with Django + Stripe
+An E-commerce, made with Django + Stripe
